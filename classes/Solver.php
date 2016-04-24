@@ -50,6 +50,7 @@ abstract class Solver
         
         
         return array(   'problemId' => $this->id,
+                        'input' => $input,
                         'solution' => $solution,
                         'totalRuns' => $totalRuns,
                         'execTime' => $execTime     );
