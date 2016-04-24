@@ -1,6 +1,6 @@
 <?php
 
-include_once("../classes/dbConnection.php");
+include_once("../classes/DbConnection.php");
 
 
 // Data = available Proj. Euler problems
@@ -10,7 +10,7 @@ $availProblems;
 // Connect to DB and query for all available problems
 try {
     
-    $dbConn = new dbConnection();
+    $dbConn = new DbConnection();
 
     $dbHandle =& $dbConn->open();
 

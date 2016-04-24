@@ -1,6 +1,6 @@
 <?php
 
-include_once("../classes/dbConnection.php");
+include_once("../classes/DbConnection.php");
 
 
 // Get the requested problem's ID
@@ -14,13 +14,13 @@ $reqProbInfo;
 // Connect to DB and query for the given ID's problem
 try {
     
-    $dbConn = new dbConnection();
+    $dbConn = new DbConnection();
 
     $dbHandle =& $dbConn->open();
 
     // Prepare statement
     $reqProbInfo_stmt = $dbHandle->prepare("SELECT * from problems WHERE id = :id LIMIT 1");
-    $reqProbInfo_stmt->bindParam(':id', $reqProbId);
+    $reqProbInfo_stmt->bindParam(':id', $reqProbId, PDO::PARAM_INT);
     
     // Fetch
     if ($reqProbInfo_stmt->execute()) {
