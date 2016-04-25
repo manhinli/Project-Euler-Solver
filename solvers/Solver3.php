@@ -1,6 +1,6 @@
 <?php
 
-include_once("../classes/Solver.php");
+include_once(__DIR__."/../classes/Solver.php");
 
 // Project Euler
 // Problem #3

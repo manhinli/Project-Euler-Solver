@@ -1,6 +1,6 @@
 <?php
 
-include_once("DbConnection.php");
+include_once(__DIR__."/DbConnection.php");
 
 
 
@@ -49,11 +49,11 @@ abstract class Solver
         $execTime = $timeEnd - $timeStart;
         
         
-        return array(   'problemId' => $this->id,
+        return array(   'problem_id' => $this->id,
                         'input' => $input,
                         'solution' => $solution,
-                        'totalRuns' => $totalRuns,
-                        'execTime' => $execTime     );
+                        'total_runs' => $totalRuns,
+                        'exec_time' => $execTime    );
     }
     
     private function check_if_already_run($dbHandle, $input) {

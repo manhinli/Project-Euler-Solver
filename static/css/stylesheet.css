@@ -95,26 +95,18 @@ dfn {
 
 
 
-#card-workspace .card.problem .problem-statement {
-    padding: 2em;
-}
-
-
-
-#card-workspace .card.problem .problem-input-form {
-    padding: 2em;
-    border-top: 1px solid #eee;
-}
-
-
-
+#card-workspace .card.problem .problem-info,
+#card-workspace .card.problem .problem-input-form,
 #card-workspace .card.problem .solution {
     padding: 2em;
+}
+
+#card-workspace .card.problem .problem-input-form,
+#card-workspace .card.problem .solution {
     border-top: 1px solid #eee;
 }
 
 #card-workspace .card.problem .solution.in-progress {
-    padding: 2em;
     border-top-color: #CCEEFF;
     background: #EAF7FD;
 }
@@ -126,13 +118,11 @@ dfn {
 }
 
 #card-workspace .card.problem .solution.success {
-    padding: 2em;
     border-top-color: #AAFFEE;
     background: #EAFDF7;
 }
 
 #card-workspace .card.problem .solution.fail {
-    padding: 2em;
     border-top-color: #FFCCEE;
     background: #FDEAEA;
 }

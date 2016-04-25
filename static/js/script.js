@@ -1,11 +1,10 @@
 (function($) {
     // On init
-    var $XHR_problems = $.ajax({
-        url: "/api/problems.php",
-        method: "GET",
-        dataType: "json"
-    });
-
+    // var $XHR_problems = $.ajax({
+    //     url: "/api/problems.php",
+    //     method: "GET",
+    //     dataType: "json"
+    // });
 
 
     // On DOM ready
@@ -13,24 +12,24 @@
         var $nav = $("#nav");
         var $cardWorkspace = $("#card-workspace");
         
-        $XHR_problems
-            .done(function(data) {
-                var $nav_itemTemplate = $("<a>");
+        // $XHR_problems
+        //     .done(function(data) {
+        //         var $nav_itemTemplate = $("<a>");
                 
-                $nav.append(
-                    data.map(function(problemInfo) {
-                        // Copy template and insert info
-                        // Using jQuery#attr() instead of jQuery#data() to take
-                        //  advantage of CSS content()
-                        return $nav_itemTemplate.clone()
-                                .text(problemInfo.title)
-                                .attr({
-                                    "data-problem-id": problemInfo.id,
-                                    "href": "/?id=" + problemInfo.id
-                                });
-                    })
-                );
-            });
+        //         $nav.append(
+        //             data.map(function(problemInfo) {
+        //                 // Copy template and insert info
+        //                 // Using jQuery#attr() instead of jQuery#data() to take
+        //                 //  advantage of CSS content()
+        //                 return $nav_itemTemplate.clone()
+        //                         .text(problemInfo.title)
+        //                         .attr({
+        //                             "data-problem-id": problemInfo.id,
+        //                             "href": "/?id=" + problemInfo.id
+        //                         });
+        //             })
+        //         );
+        //     });
             
             
             
@@ -38,6 +37,12 @@
             e.preventDefault();
             
             var problemId = $(this).attr("data-problem-id");
+            
+            if ($(".card.problem:eq(0)", $cardWorkspace).attr("data-problem-id") === problemId) {
+                // Don't load again, focus into form
+                $(".card.problem:eq(0) form.problem-input-form *:input[type!=hidden]:first").focus();
+                return;
+            }
             
             // Load problem info
             $.ajax({
@@ -76,6 +81,8 @@
                                         ])
                                         
                 $cardWorkspace.prepend($card_problem);
+                
+                $("form.problem-input-form *:input[type!=hidden]:first", $card_problem).focus();
             });
             
             
@@ -104,7 +111,7 @@
                 url: "/api/solve.php",
                 method: "POST",
                 data: {
-                    "problemId": problemId,
+                    "problem_id": problemId,
                     "input": inputVal
                 },
                 dataType: "json"
