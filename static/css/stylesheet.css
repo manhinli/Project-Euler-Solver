@@ -1,0 +1,149 @@
+html, body {
+    box-sizing: border-box;
+    
+    font-size: 18px;
+    
+    background: #F3EADD;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+
+
+/* Some definitions may be included in problem statements */
+dfn {
+    font-style: italic;
+    border-bottom: 0.05em dashed;
+    cursor: help;
+}
+
+
+
+#header {
+    text-align: center;
+    border-bottom: 1px solid #bbb;
+}
+
+
+/* Navigation block for problem selection */
+#nav {
+    display: block;
+}
+
+#nav > a {
+    display: block;
+    padding: 0.3em 0.5em;
+}
+
+#nav > a::before {
+    display: inline;
+    content: "#" attr(data-problem-id) " ";
+}
+
+
+/* Workspace for all cards such as problem statements/forms */
+#card-workspace {
+    display: block;
+    padding: 2em;
+}
+
+#card-workspace .card {
+    position: relative;
+    
+    display: block;
+    padding: 2em;
+    
+    margin: 0 auto;
+    max-width: 60em;
+    
+    background: #f8f8f8;
+    border: 1px solid #bbb;
+    box-shadow: 0.2em 0.2em 0.1em #bbb;
+}
+
+#card-workspace .card h1,
+#card-workspace .card h2,
+#card-workspace .card h3,
+#card-workspace .card p
+{
+    margin: 0;
+}
+
+#card-workspace .card + .card {
+    margin-top: 2em;
+}
+
+#card-workspace .card.problem::before {
+    display: inline-block;
+    content: "#" attr(data-problem-id);
+    
+    position: absolute;
+    right: 0.2em;
+    top: 0;
+    
+    opacity: 0.05;
+    
+    font-size: 6em;
+    color: #000;
+}
+
+#card-workspace .card.problem {
+    padding: 0;
+}
+
+
+
+#card-workspace .card.problem .problem-statement {
+    padding: 2em;
+}
+
+
+
+#card-workspace .card.problem .problem-input-form {
+    padding: 2em;
+    border-top: 1px solid #eee;
+}
+
+
+
+#card-workspace .card.problem .solution {
+    padding: 2em;
+    border-top: 1px solid #eee;
+}
+
+#card-workspace .card.problem .solution.in-progress {
+    padding: 2em;
+    border-top-color: #CCEEFF;
+    background: #EAF7FD;
+}
+
+#card-workspace .card.problem .solution.in-progress::after {
+    content: "Computing solution...";
+    display: block;
+    font-style: italic;
+}
+
+#card-workspace .card.problem .solution.success {
+    padding: 2em;
+    border-top-color: #AAFFEE;
+    background: #EAFDF7;
+}
+
+#card-workspace .card.problem .solution.fail {
+    padding: 2em;
+    border-top-color: #FFCCEE;
+    background: #FDEAEA;
+}
+
+/*#card-workspace .card.problem + .card.problem-input {
+    margin-top: -1px;
+    border-top-color: #eee;
+}
+
+#card-workspace .card.problem-input + .card.problem-input {
+    margin-top: -1px;
+    border-top-color: #CCEEFF;
+    background: #EAF7FD;
+}*/

@@ -1,11 +1,15 @@
 <?php
 
-// TODO: This will need to be changed to accept JSON coming in via. POST
+// Only process POSTs
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    die();
+}
 
+// Parse incoming data
+$data = $_POST;
 
 // Get the requested problem's ID
-$reqProbId = intval($_GET["id"]);
-
+$reqProbId = intval($data["problemId"]);
 
 // Dynamically generate the class (which should be named "SolverX" where X = ID)
 $solverClass = "Solver" . $reqProbId;
@@ -15,7 +19,8 @@ include_once("../solvers/" . $solverClass . ".php");
 $solver = new $solverClass();
 
 
-$input = "123"; // TODO: Input data required here
+
+$input = $data["input"];
 
 // Run the solver
 $output = $solver->solve(trim($input));
