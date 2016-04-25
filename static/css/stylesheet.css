@@ -53,7 +53,7 @@ dfn {
     position: relative;
     
     display: block;
-    padding: 2em;
+    padding: 2rem;
     
     margin: 0 auto;
     max-width: 60em;
@@ -68,7 +68,7 @@ dfn {
 #card-workspace .card h3,
 #card-workspace .card p
 {
-    margin: 0;
+    margin: 0.5em 0;
 }
 
 #card-workspace .card + .card {
@@ -103,7 +103,7 @@ dfn {
 
 #card-workspace .card.problem .problem-input-form,
 #card-workspace .card.problem .solution {
-    border-top: 1px solid #eee;
+    border-top: 1px solid #ddd;
 }
 
 #card-workspace .card.problem .solution.in-progress {
@@ -137,3 +137,107 @@ dfn {
     border-top-color: #CCEEFF;
     background: #EAF7FD;
 }*/
+
+
+#card-workspace .card.problem .proj-euler-link {
+    margin-top: 3em;
+    display: inline-block;
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+
+#card-workspace .card.problem .problem-input-form {
+    font-size: 1.15em;
+}
+
+#card-workspace .card.problem .problem-input-form input {
+    padding: 0.3em;
+}
+
+#card-workspace .card.problem .problem-input-form .problem-input-label {
+    margin-bottom: 0.5em;
+}
+
+/*#card-workspace .card.problem .solution {
+    display: table;
+    width: 100%;
+    padding: 1rem 0;
+}
+
+#card-workspace .card.problem .solution .row {
+    display: table-row;
+}
+
+#card-workspace .card.problem .solution .cell {
+    display: table-cell;
+    padding: 1rem 2rem;
+}*/
+
+
+
+#card-workspace .card.problem .solution .solution-input,
+#card-workspace .card.problem .solution .solution-output {
+    display: inline-block;
+    
+    font-weight: bold;
+    word-break: break-all;
+}
+
+#card-workspace .card.problem .solution .solution-input {
+    font-size: 2.5em;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+#card-workspace .card.problem .solution .solution-output {
+    font-size: 3em;
+    text-align: right;
+    float: right;
+    margin-left: 10%;
+    color: #000;
+}
+
+#card-workspace .card.problem .solution .solution-input::before,
+#card-workspace .card.problem .solution .solution-output::before {
+    display: block;
+    font-size: 0.8rem;
+    font-style: italic;
+    font-weight: normal;
+}
+
+#card-workspace .card.problem .solution .solution-input::before {
+    content: "Input";
+}
+
+#card-workspace .card.problem .solution .solution-output::before {
+    content: "Solution";
+}
+
+#card-workspace .card.problem .solution .solution-compute-info {
+    display: table;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+#card-workspace .card.problem .solution .solution-compute-info .cell {
+    display: table-cell;
+}
+
+#card-workspace .card.problem .solution .solution-total-runs {
+    font-size: 1.2em;
+}
+
+#card-workspace .card.problem .solution .solution-exec-time {
+    font-size: 0.8rem;
+    text-align: right;
+    opacity: 0.2;
+}
+
+
+/* Clearfix */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}

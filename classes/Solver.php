@@ -46,7 +46,7 @@ abstract class Solver
         
         // Execution time for solution fetch/generation
         // Time resolution = seconds
-        $execTime = $timeEnd - $timeStart;
+        $execTime = round($timeEnd - $timeStart, 3);
         
         
         return array(   'problem_id' => $this->id,

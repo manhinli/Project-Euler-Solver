@@ -24,9 +24,11 @@ class Solver5 extends Solver {
             throw new Exception("Input not positive integer");
         }
 
-        // We can't really do much with 1 as an input
+
+
+        // Special case for 1 => 1 is the smallest multiple
         if ($input === 1) {
-            throw new Exception("Number '1' cannot be operated on - number must be greater than 1");
+            return "1";         // Output is string
         }
         
         
