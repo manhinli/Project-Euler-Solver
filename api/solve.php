@@ -1,31 +1,31 @@
 <?php
 
 require_once(__DIR__."/../classes/ApiWrapper.php");
+require_once(__DIR__."/../classes/Solver.php");
 
-// Only process POSTs
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    die();
-}
-
-// Parse incoming data
-$data = $_POST;
-
-// Get the requested problem's ID
-$reqProbId = intval($data["problem_id"]);
-
-// Dynamically generate the class (which should be named "SolverX" where X = ID)
-$solverClass = "Solver" . $reqProbId;
-
-require_once(__DIR__."/../solvers/" . $solverClass . ".php");
-
-$solver = new $solverClass();
-
-
-
-$input = $data["input"];
-
-// Run the solver
 try {
+    // Only process POSTs
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+        throw new Exception("Unsupported method");
+    }
+
+    // Get the requested problem's ID
+    $reqProbId = intval($_POST["problem_id"]);
+
+    if ($reqProbId < 1) {
+        throw new Exception("Invalid problem ID");
+    }
+
+    // Dynamically generate the class
+    $solver = SolverUtil::load_solver($reqProbId);
+
+    if (!isset($_POST["input"])) {
+        throw new Exception("No input received");    
+    }
+
+    $input = $_POST["input"];
+
+    // Run the solver
     $output = $solver->solve(trim($input));
     (new ApiWrapper($output))->respond_as_json();
     

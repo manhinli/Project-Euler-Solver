@@ -1,6 +1,7 @@
 <?php
     // Includes for the whole page
     require_once(__DIR__."/classes/Problems.php");
+    require_once(__DIR__."/classes/Solver.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,11 +62,7 @@ EOT;
         // If we're supposed to generate the solution, then include it in the
         // problem info card
         if (isset($_POST["input"])) {
-            $solverClass = "Solver" . $reqProbId;
-
-            require_once(__DIR__."/solvers/" . $solverClass . ".php");
-
-            $solver = new $solverClass();
+            $solver = SolverUtil::load_solver($reqProbId);
 
             // Run the solver
             $input = trim($_POST["input"]);

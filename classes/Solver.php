@@ -2,8 +2,6 @@
 
 require_once(__DIR__."/DbConnection.php");
 
-
-
 // All solvers should be named "SolverX" where `X` is the ID of the problem
 // that the solver is solving for.
 
@@ -143,6 +141,20 @@ abstract class Solver
     
     // To be implemented by the solver class
     abstract protected function execute_solver($input);
+}
+
+class SolverUtil {
+    public static function load_solver($reqProbId) {
+        $solverClass = "Solver" . $reqProbId;
+
+        try {
+            require_once(__DIR__."/../solvers/" . $solverClass . ".php");
+        } catch (Exception $e) {
+            throw new Exception("Unable to locate or load solver code");
+        }
+        
+        return new $solverClass();
+    }
 }
 
 ?>

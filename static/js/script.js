@@ -50,20 +50,27 @@
         return $solution;
     }
     
-    function loadProblemCard(problemId, $cardWorkspace) {
-        if ($(".card.problem:eq(0)", $cardWorkspace).attr("data-problem-id") === problemId) {
+    function loadProblemCard(problemId, $cardWorkspace, disableHistoryPush) {
+        var $topProblemCard = $(".card.problem", $cardWorkspace).eq(0);
+        
+        if ($topProblemCard.attr("data-problem-id") === problemId) {
             // Don't load again, focus into form
-            $(".card.problem:eq(0) form.problem-input-form *:input[type!=hidden]:first").focus();
+            $("form.problem-input-form *:input[type!=hidden]:first", $topProblemCard).focus();
             return;
         }
         
         // Create placeholder card
-        var $card_placeholder = $("<div>").addClass("card loading").html("Loading Problem <b>#" + problemId + "</b>...");
+        var $card_placeholder = $("<div>")
+                                    .addClass("card loading")
+                                    .html("Loading Problem <b>#" + problemId + "</b>...");
+                                    
         $cardWorkspace.prepend($card_placeholder);
         
         // Modify the URL and history to reflect new problem load
-        history.pushState({ problemId: problemId }, document.title, "?id=" + problemId);
-            
+        if (!disableHistoryPush){
+            history.pushState({ problemId: problemId }, document.title, "?id=" + problemId);
+        }
+        
         // Scroll to the top so the user knows that problem info is loading
         $cardWorkspace.scrollTop(0);
         
@@ -176,7 +183,7 @@
             
             // Also load the problem card if we go backward/forwards in history
             if (state.problemId) {
-                loadProblemCard(state.problemId, $cardWorkspace);
+                loadProblemCard(state.problemId, $cardWorkspace, true);
             }
         });
         
