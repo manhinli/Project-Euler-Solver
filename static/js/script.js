@@ -1,38 +1,60 @@
 (function($) {
-    // On init
-    // var $XHR_problems = $.ajax({
-    //     url: "/api/problems.php",
-    //     method: "GET",
-    //     dataType: "json"
-    // });
-
-
+    // Templates
+    function createProblemCard(problemInfo) {
+        var $card_problem = $('\
+            <div class="card problem">\
+                <div class="problem-info">\
+                    <h2 class="problem-title"></h2>\
+                    <div class="problem-statement"></div>\
+                    <a class="proj-euler-link">View this problem on Project Euler »</a>\
+                </div>\
+                <form class="problem-input-form" method="post">\
+                    <input type="hidden" name="problem_id" />\
+                    <label>\
+                        <div class="problem-input-label"></div>\
+                        <input type="text" name="input" autofocus />\
+                    </label>\
+                    <input type="submit" value="Solve!" />\
+                </form>\
+            </div>');
+          
+        // Fill in content
+        $card_problem.attr("data-problem-id", problemInfo.id);
+        $(".problem-title", $card_problem).html(problemInfo.title);
+        $(".problem-statement", $card_problem).html(problemInfo.statement);
+        $(".proj-euler-link", $card_problem).prop("href", "https://projecteuler.net/problem=" + problemInfo.id)
+        $("form.problem-input-form input[name='problem_id']", $card_problem).val(problemInfo.id);
+        $(".problem-input-label", $card_problem).html(problemInfo.input_label);
+        
+        return $card_problem;
+    }
+    
+    function createSolutionBlock() {
+        var $solution = $('\
+            <div class="solution">\
+                <div class="solution-input"></div>\
+                <div class="solution-output"></div>\
+                <div class="clearfix"></div>\
+                <div class="solution-compute-info">\
+                    <div class="cell solution-total-runs"><b class="solution-total-run-value"></b> total run<span class="solution-total-run-value-plural">s</span> of this solution</div>\
+                    <div class="cell solution-exec-time"><span class="solution-exec-time-value"></span> sec</div>\
+                </div>\
+                <div class="solution-exception"></div>\
+            </div>');
+            
+        // Manage content
+        $(".solution-compute-info", $solution).hide();
+            
+        return $solution;
+    }
+    
+    
     // On DOM ready
     $(function() {
         var $nav = $("#nav");
         var $cardWorkspace = $("#card-workspace");
         
-        // $XHR_problems
-        //     .done(function(data) {
-        //         var $nav_itemTemplate = $("<a>");
-                
-        //         $nav.append(
-        //             data.map(function(problemInfo) {
-        //                 // Copy template and insert info
-        //                 // Using jQuery#attr() instead of jQuery#data() to take
-        //                 //  advantage of CSS content()
-        //                 return $nav_itemTemplate.clone()
-        //                         .text(problemInfo.title)
-        //                         .attr({
-        //                             "data-problem-id": problemInfo.id,
-        //                             "href": "/?id=" + problemInfo.id
-        //                         });
-        //             })
-        //         );
-        //     });
-            
-            
-            
+        // Selecting a new problem
         $nav.on("click", "a", function(e) {
             e.preventDefault();
             
@@ -44,6 +66,13 @@
                 return;
             }
             
+            // Create placeholder card
+            var $card_placeholder = $("<div>").addClass("card loading").text("Loading Problem <b>#" + problemId + "</b>...");
+            $cardWorkspace.prepend($card_placeholder);
+            
+            // Scroll to the top so the user knows that problem info is loading
+            $cardWorkspace.scrollTop(0);
+            
             // Load problem info
             $.ajax({
                 url: "/api/problem.php",
@@ -53,33 +82,9 @@
                 method: "GET",
                 dataType: "json"
             }).done(function(problemInfo) {
-                var $card_problem = $("<div>")
-                                        .addClass("card problem")
-                                        .attr({
-                                            "data-problem-id": problemInfo.id
-                                        })
-                                        .append([
-                                            $("<div>")
-                                                .addClass("problem-statement")
-                                                .append([
-                                                    $("<h2>").text(problemInfo.title),
-                                                    $("<div>").html(problemInfo.statement),
-                                                    $("<a>").text("See this problem on Project Euler").prop("href", "https://projecteuler.net/problem="+problemInfo.id)  
-                                                ]),
-                                            
-                                            $("<form>")
-                                                .addClass("problem-input-form")
-                                                .attr({
-                                                    "data-problem-id": problemInfo.id
-                                                })
-                                                .append([
-                                                    $("<input>").prop({
-                                                        "placeholder": problemInfo.input_label,
-                                                        "name": "input"
-                                                    })
-                                                ])
-                                        ])
-                                        
+                var $card_problem = createProblemCard(problemInfo);
+                
+                $card_placeholder.remove();
                 $cardWorkspace.prepend($card_problem);
                 
                 $("form.problem-input-form *:input[type!=hidden]:first", $card_problem).focus();
@@ -88,21 +93,16 @@
             
         });
         
-        
+        // Submitting input to the solver
         $cardWorkspace.on("submit", "form.problem-input-form", function(e) {
             e.preventDefault();
             
-            var problemId = $(this).attr("data-problem-id");
-            var inputVal = $("input", this).val();
-            
-            
+            var problemId = $(this).closest(".card.problem").attr("data-problem-id");
+            var inputVal = $.trim($("input[name='input']", this).val());
             
             // Load solutions below form
-            var $solution = $("<div>")
-                                .addClass("solution")
-                                .append([
-                                    $("<p>").text(inputVal)
-                                ])
+            var $solution = createSolutionBlock();
+            $(".solution-input", $solution).text(inputVal);
             
             // Load
             $solution.addClass("in-progress");
@@ -119,20 +119,24 @@
                 .done(function(solutionInfo) {
                     $solution
                         .removeClass("in-progress")
-                        .addClass("success")
-                        .append([
-                            $("<p>").text(solutionInfo.solution),
-                            $("<p>").text("Total runs = " + solutionInfo.totalRuns),
-                            $("<p>").text("This took " + solutionInfo.execTime + "s")
-                        ]);
+                        .addClass("success");
+                    
+                    $(".solution-output", $solution).text(solutionInfo.solution);
+                    $(".solution-total-run-value", $solution).text(solutionInfo.total_runs);
+                    $(".solution-exec-time-value", $solution).text(solutionInfo.exec_time);
+                    
+                    if (solutionInfo.total_runs === 1) {
+                        $(".solution-total-run-value-plural", $solution).remove();
+                    }
+                    
+                    $(".solution-compute-info", $solution).show();
                 })
                 .fail(function() {
                     $solution
                         .removeClass("in-progress")
-                        .addClass("fail")
-                        .append([
-                            $("<p>").text("Something went wrong :(")
-                        ]);
+                        .addClass("fail");
+                    
+                    $(".solution-exception", $solution).text("A server error occurred. Please check over your input and try again later.");
                 })
             
             // Insert the $solution DOM element after the form
@@ -141,6 +145,8 @@
             // Reset the form
             this.reset();
         });
+        
+        
     });
     
 })($);

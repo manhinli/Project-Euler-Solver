@@ -3,7 +3,9 @@ html, body {
     
     font-size: 18px;
     
-    background: #F3EADD;
+    height: 100%;
+    
+    font-family: "Open Sans", sans-serif;
 }
 
 *, *::before, *::after {
@@ -24,41 +26,113 @@ dfn {
 #header {
     text-align: center;
     border-bottom: 1px solid #bbb;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6em;
+    
+    background: linear-gradient(to bottom, #FFE8B4, #FFBC00);
+}
+
+#header > h1 {
+    margin: 0.3em;
+    font-size: 3em;
+    font-weight: normal;
+}
+
+#header > h1 > a {
+    color: #000;
+    text-decoration: none;
+}
+
+#content {
+    position: absolute;
+    top: 6em;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#content > * {
+    overflow-y: auto;
 }
 
 
 /* Navigation block for problem selection */
 #nav {
     display: block;
+    
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    
+    width: 20%;
+    
+    border-right: 1px solid #bbb;
+}
+
+#nav > * {
+    display: block;
+    padding: 0.5em 0.5rem;
+}
+
+#nav > .title {
+    margin: 0.5em 0;
 }
 
 #nav > a {
-    display: block;
-    padding: 0.3em 0.5em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    color: #333;
+    text-decoration: none;
+
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+#nav > a + a {
+    border-top: 0;
 }
 
 #nav > a::before {
     display: inline;
     content: "#" attr(data-problem-id) " ";
+    color: #555;
+    font-weight: bold;
 }
 
+#nav > a:hover {
+    background: #FFFBF2;
+}
+
+#nav > a:focus,
+#nav > a:active {
+    background: #FFE8B4;
+}
 
 /* Workspace for all cards such as problem statements/forms */
 #card-workspace {
     display: block;
-    padding: 2em;
+    
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20%;
+    right: 0;
 }
 
 #card-workspace .card {
     position: relative;
     
     display: block;
-    padding: 2rem;
     
     margin: 0 auto;
     max-width: 60em;
     
-    background: #f8f8f8;
+    background: #FFFBF2;
     border: 1px solid #bbb;
     box-shadow: 0.2em 0.2em 0.1em #bbb;
 }
@@ -93,12 +167,17 @@ dfn {
     padding: 0;
 }
 
+#card-workspace .card.loading {
+    font-style: italic;
+    text-align: center;
+}
 
-
+#card-workspace,
+#card-workspace .card,
 #card-workspace .card.problem .problem-info,
 #card-workspace .card.problem .problem-input-form,
 #card-workspace .card.problem .solution {
-    padding: 2em;
+    padding: 2rem;
 }
 
 #card-workspace .card.problem .problem-input-form,
@@ -109,12 +188,6 @@ dfn {
 #card-workspace .card.problem .solution.in-progress {
     border-top-color: #CCEEFF;
     background: #EAF7FD;
-}
-
-#card-workspace .card.problem .solution.in-progress::after {
-    content: "Computing solution...";
-    display: block;
-    font-style: italic;
 }
 
 #card-workspace .card.problem .solution.success {
@@ -142,13 +215,13 @@ dfn {
 #card-workspace .card.problem .proj-euler-link {
     margin-top: 3em;
     display: inline-block;
-    font-size: 0.7em;
+    font-size: 0.8em;
     font-style: italic;
 }
 
 
 #card-workspace .card.problem .problem-input-form {
-    font-size: 1.15em;
+    font-size: 1.2em;
 }
 
 #card-workspace .card.problem .problem-input-form input {
@@ -214,10 +287,26 @@ dfn {
     content: "Solution";
 }
 
+#card-workspace .card.problem .solution.in-progress .solution-output::after {
+    content: "...";
+    display: inline;
+    color: blue;
+}
+
+#card-workspace .card.problem .solution.fail .solution-output::after {
+    content: "Failed";
+    display: inline;
+    color: red;
+}
+
 #card-workspace .card.problem .solution .solution-compute-info {
     display: table;
     width: 100%;
     margin-top: 2rem;
+}
+
+#card-workspace .card.problem .solution .solution-exception {
+    font-style: italic;
 }
 
 #card-workspace .card.problem .solution .solution-compute-info .cell {
@@ -234,10 +323,71 @@ dfn {
     opacity: 0.2;
 }
 
-
 /* Clearfix */
 .clearfix::after {
     content: "";
     clear: both;
     display: table;
+}
+
+
+
+
+
+@media (max-width: 1200px) {
+    html, body {
+        font-size: 16px;
+    }
+    
+    #nav {
+        width: 25%;
+    }
+    
+    #card-workspace {
+        left: 25%;
+    }
+}
+
+@media (max-width: 900px) {
+    html, body {
+        font-size: 14px;
+    }
+    
+    #header {
+        height: 4em;
+    }
+    
+    #header > h1 {
+        font-size: 2em;
+    }
+    
+    #content {
+        top: 4em;
+    }
+    
+    #nav {
+        position: static;
+        max-height: 50%;
+        width: 100%;
+        
+        border-right: none;
+    }
+    
+    #nav > * {
+        padding: 0.5em 1rem;
+    }
+    
+    #card-workspace {
+        position: static;
+        width: 100%;
+    }
+    
+    #card-workspace,
+    #card-workspace .card,
+    #card-workspace .card.problem .problem-info,
+    #card-workspace .card.problem .problem-input-form,
+    #card-workspace .card.problem .solution {
+        padding: 1rem;
+    }
+    
 }

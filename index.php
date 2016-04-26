@@ -10,6 +10,7 @@
     
     <title>Project Euler Solver</title>
     
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" />
     <link rel="stylesheet" href="static/css/normalize.css" />
     <link rel="stylesheet" href="static/css/stylesheet.css" />
     
@@ -23,16 +24,6 @@
         </h1>
     </div>
     <div id="content">
-        <div id="nav">
-<?php
-    // Generate the links to each problem
-    foreach (Problems::fetchAll() as $problemInfo) {
-        echo <<<EOT
-            <a href="/?id=$problemInfo[id]" data-problem-id="$problemInfo[id]">$problemInfo[title]</a>
-EOT;
-    }
-?>
-        </div>
         <div id="card-workspace">
 <?php
     // If there is an ID given, load that card in
@@ -62,8 +53,9 @@ EOT;
                         <div class="problem-input-label">$problemInfo[input_label]</div>
                         <input type="text" name="input" autofocus />
                     </label>
-                    <input type="submit" value="Solve!"/>
+                    <input type="submit" value="Solve!" />
                 </form>
+
 EOT;
         
         // If we're supposed to generate the solution, then include it in the
@@ -83,25 +75,36 @@ EOT;
         
                 $input_htmlEscaped = htmlspecialchars($solutionInfo[input]);
             
+                $total_runs_plural = "s";
+                
+                if ($solutionInfo[total_runs] === 1) {
+                    $total_runs_plural = "";
+                }
+            
                 $card_problemInfo .= <<<EOT
                 <div class="solution success">
                     <div class="solution-input">$input_htmlEscaped</div>
                     <div class="solution-output">$solutionInfo[solution]</div>
                     <div class="clearfix"></div>
                     <div class="solution-compute-info">
-                        <div class="cell solution-total-runs"><b>$solutionInfo[total_runs]</b> total runs of this solution</div>
-                        <div class="cell solution-exec-time">$solutionInfo[exec_time] sec</div>
+                        <div class="cell solution-total-runs"><b class="solution-total-run-value">$solutionInfo[total_runs]</b> total run$total_runs_plural of this solution</div>
+                        <div class="cell solution-exec-time"><span class="solution-exec-time-value">$solutionInfo[exec_time]</span> sec</div>
                     </div>
                 </div>
+
 EOT;
             } catch (Exception $e) {
                 $input_htmlEscaped = htmlspecialchars($input);
                 $exception_htmlEscaped = htmlspecialchars($e->getMessage());
+                
                 $card_problemInfo .= <<<EOT
                 <div class="solution fail">
-                    <p>$input_htmlEscaped</p>
-                    <p>$exception_htmlEscaped</p>
+                    <div class="solution-input">$input_htmlEscaped</div>
+                    <div class="solution-output"></div>
+                    <div class="clearfix"></div>
+                    <div class="solution-exception">An error occurred: $exception_htmlEscaped</div>
                 </div>
+
 EOT;
             }
         }
@@ -109,6 +112,7 @@ EOT;
         // Finish the card's HTML
         $card_problemInfo .= <<<EOT
             </div>
+
 EOT;
 
     // Put the HTML in
@@ -123,6 +127,18 @@ EOT;
 <?php } ?>
                 <p>Content and problem statements derived from <a href="https://projecteuler.net">Project Euler</a> licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/2.0/uk/">Creative Commons BY-NC-SA 2.0 UK</a>.</p>
             </div>
+        </div>
+        <div id="nav">
+            <h3 class="title">Problems</h3>
+<?php
+    // Generate the links to each problem
+    foreach (Problems::fetchAll() as $problemInfo) {
+        echo <<<EOT
+            <a href="/?id=$problemInfo[id]" data-problem-id="$problemInfo[id]">$problemInfo[title]</a>
+
+EOT;
+    }
+?>
         </div>
     </div>
 </body>
