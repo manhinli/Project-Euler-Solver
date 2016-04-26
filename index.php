@@ -132,7 +132,7 @@ EOT;
             <h3 class="title">Problems</h3>
 <?php
     // Generate the links to each problem
-    foreach (Problems::fetchAll() as $problemInfo) {
+    foreach (Problems::fetch_all() as $problemInfo) {
         echo <<<EOT
             <a href="/?id=$problemInfo[id]" data-problem-id="$problemInfo[id]">$problemInfo[title]</a>
 

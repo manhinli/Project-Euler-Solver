@@ -19,7 +19,7 @@ class DbConnection {
     private $handle;
  
     
-    public function &getHandle() {
+    public function &get_handle() {
         return $this->handle;
     }
     
@@ -30,7 +30,7 @@ class DbConnection {
             self::$password,
             self::$pdoOptions);
             
-        return $this->getHandle();
+        return $this->get_handle();
     }
     
     public function close() {

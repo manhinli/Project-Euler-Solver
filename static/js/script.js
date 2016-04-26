@@ -1,5 +1,5 @@
 (function($) {
-    // Templates
+    // Templates and core functions
     function createProblemCard(problemInfo) {
         var $card_problem = $('\
             <div class="card problem">\
@@ -40,12 +40,49 @@
                     <div class="cell solution-exec-time"><span class="solution-exec-time-value"></span> sec</div>\
                 </div>\
                 <div class="solution-exception"></div>\
+                <a href="#" class="solution-close">Close this solution</a>\
+                <div class="clearfix"></div>\
             </div>');
             
         // Manage content
         $(".solution-compute-info", $solution).hide();
             
         return $solution;
+    }
+    
+    function loadProblemCard(problemId, $cardWorkspace) {
+        if ($(".card.problem:eq(0)", $cardWorkspace).attr("data-problem-id") === problemId) {
+            // Don't load again, focus into form
+            $(".card.problem:eq(0) form.problem-input-form *:input[type!=hidden]:first").focus();
+            return;
+        }
+        
+        // Create placeholder card
+        var $card_placeholder = $("<div>").addClass("card loading").html("Loading Problem <b>#" + problemId + "</b>...");
+        $cardWorkspace.prepend($card_placeholder);
+        
+        // Modify the URL and history to reflect new problem load
+        history.pushState({ problemId: problemId }, document.title, "?id=" + problemId);
+            
+        // Scroll to the top so the user knows that problem info is loading
+        $cardWorkspace.scrollTop(0);
+        
+        // Load problem info
+        $.ajax({
+            url: "/api/problem.php",
+            data: {
+                "id": problemId
+            },
+            method: "GET",
+            dataType: "json"
+        }).done(function(problemInfo) {
+            var $card_problem = createProblemCard(problemInfo);
+            
+            $card_placeholder.after($card_problem);
+            $card_placeholder.remove();
+            
+            $("form.problem-input-form *:input[type!=hidden]:first", $card_problem).focus();
+        });
     }
     
     
@@ -60,37 +97,7 @@
             
             var problemId = $(this).attr("data-problem-id");
             
-            if ($(".card.problem:eq(0)", $cardWorkspace).attr("data-problem-id") === problemId) {
-                // Don't load again, focus into form
-                $(".card.problem:eq(0) form.problem-input-form *:input[type!=hidden]:first").focus();
-                return;
-            }
-            
-            // Create placeholder card
-            var $card_placeholder = $("<div>").addClass("card loading").text("Loading Problem <b>#" + problemId + "</b>...");
-            $cardWorkspace.prepend($card_placeholder);
-            
-            // Scroll to the top so the user knows that problem info is loading
-            $cardWorkspace.scrollTop(0);
-            
-            // Load problem info
-            $.ajax({
-                url: "/api/problem.php",
-                data: {
-                    "id": problemId
-                },
-                method: "GET",
-                dataType: "json"
-            }).done(function(problemInfo) {
-                var $card_problem = createProblemCard(problemInfo);
-                
-                $card_placeholder.remove();
-                $cardWorkspace.prepend($card_problem);
-                
-                $("form.problem-input-form *:input[type!=hidden]:first", $card_problem).focus();
-            });
-            
-            
+            loadProblemCard(problemId, $cardWorkspace);
         });
         
         // Submitting input to the solver
@@ -131,12 +138,22 @@
                     
                     $(".solution-compute-info", $solution).show();
                 })
-                .fail(function() {
+                .fail(function(jqXHR) {
                     $solution
                         .removeClass("in-progress")
                         .addClass("fail");
                     
-                    $(".solution-exception", $solution).text("A server error occurred. Please check over your input and try again later.");
+                    var exceptionMessage = "An unknown error has occurred. Please check your input and try again later.";
+                    
+                    if (jqXHR.responseText) {
+                        var responseJson = $.parseJSON(jqXHR.responseText);
+                        
+                        if (responseJson.error) {
+                            exceptionMessage = responseJson.error;    
+                        }
+                    }
+                    
+                    $(".solution-exception", $solution).text(exceptionMessage);
                 })
             
             // Insert the $solution DOM element after the form
@@ -146,6 +163,22 @@
             this.reset();
         });
         
+        // Closing a solution
+        $cardWorkspace.on("click", "a.solution-close", function(e) {
+            e.preventDefault();
+            
+            $(this).closest(".solution").remove();
+        });
+        
+        // On history going back/forwards
+        $(window).on("popstate", function(e) {
+            var state = e.originalEvent.state;
+            
+            // Also load the problem card if we go backward/forwards in history
+            if (state.problemId) {
+                loadProblemCard(state.problemId, $cardWorkspace);
+            }
+        });
         
     });
     

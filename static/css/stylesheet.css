@@ -288,7 +288,7 @@ dfn {
 }
 
 #card-workspace .card.problem .solution.in-progress .solution-output::after {
-    content: "...";
+    content: "Computing...";
     display: inline;
     color: blue;
 }
@@ -307,6 +307,7 @@ dfn {
 
 #card-workspace .card.problem .solution .solution-exception {
     font-style: italic;
+    color: red;
 }
 
 #card-workspace .card.problem .solution .solution-compute-info .cell {
@@ -321,6 +322,13 @@ dfn {
     font-size: 0.8rem;
     text-align: right;
     opacity: 0.2;
+}
+
+#card-workspace .card.problem .solution .solution-close {
+    font-size: 0.8rem;
+    float: right;
+    color: #333;
+    margin-top: 1em;
 }
 
 /* Clearfix */

@@ -1,9 +1,14 @@
 <?php
 
+require_once(__DIR__."/../classes/ApiWrapper.php");
 require_once(__DIR__."/../classes/Problems.php");
     
-// Return data as JSON
-header("Content-Type: application/json; charset=utf-8");
-echo json_encode(Problems::fetchAll(), JSON_UNESCAPED_UNICODE);
+try {
+    $allProblems = Problems::fetch_all();
+    (new ApiWrapper($allProblems))->respond_as_json();
+    
+} catch (Exception $e) {
+    (new ErrorApiWrapper($e))->respond_as_json();
+}
 
 ?>

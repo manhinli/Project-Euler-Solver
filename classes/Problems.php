@@ -13,11 +13,16 @@ class Problems {
         $reqProbInfo_stmt->bindParam(':id', $reqProbId, PDO::PARAM_INT);
         
         // Fetch
-        $reqProbInfo;
+        if (!$reqProbInfo_stmt->execute()) {
+            throw new Exception("Could not fetch requested problem");
+        }
         
-        if ($reqProbInfo_stmt->execute()) {
-            // Should only ever be one row at most
-            $reqProbInfo = $reqProbInfo_stmt->fetch(PDO::FETCH_ASSOC);
+        // Should only ever be one row at most
+        $reqProbInfo = $reqProbInfo_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // If no information, then either it's not valid or we couldn't get it
+        if (!$reqProbInfo) {
+            throw new Exception("Could not fetch requested problem or it does not exist");
         }
         
         $dbConn->close();
@@ -25,7 +30,7 @@ class Problems {
         return $reqProbInfo;
     }
     
-    public static function fetchAll() {
+    public static function fetch_all() {
         $dbConn = new DbConnection();
 
         $dbHandle =& $dbConn->open();

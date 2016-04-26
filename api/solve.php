@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__."/../classes/ApiWrapper.php");
+
 // Only process POSTs
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     die();
@@ -23,11 +25,12 @@ $solver = new $solverClass();
 $input = $data["input"];
 
 // Run the solver
-$output = $solver->solve(trim($input));
-
-
-// Return data as JSON
-header("Content-Type: application/json; charset=utf-8");
-echo json_encode($output, JSON_UNESCAPED_UNICODE);
+try {
+    $output = $solver->solve(trim($input));
+    (new ApiWrapper($output))->respond_as_json();
+    
+} catch (Exception $e) {
+    (new ErrorApiWrapper($e))->respond_as_json();
+}
 
 ?>

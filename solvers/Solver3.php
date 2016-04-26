@@ -15,7 +15,14 @@ class Solver3 extends Solver {
     protected $id = 3;      // <--- This must match problem ID
     
     protected function execute_solver($input) {
-        $input = intval($input);
+        $input_asInt = intval($input);
+        
+        // Check str->int transform didn't screw up (e.g. clipping)
+        if (strval($input_asInt) !== strval($input)) {
+            throw new Exception("Input not a valid integer or could not be safely handled");
+        }
+        
+        $input = $input_asInt;
         
         // We can only process positive integers
         if ($input < 1) {

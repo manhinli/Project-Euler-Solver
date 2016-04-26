@@ -12,6 +12,8 @@ abstract class Solver
     protected $id;
     
     public function solve($input) {
+        $this->check_id_exists();
+        
         // Time execution
         $timeStart = microtime(true);
         
@@ -56,14 +58,16 @@ abstract class Solver
                         'exec_time' => $execTime    );
     }
     
-    private function check_if_already_run($dbHandle, $input) {
         // Check that $id is defined
         // This is required in order to be able to look up the
         //  correct entries for the selected problem
+    private function check_id_exists() {
         if (!isset($this->id)) {
             throw new Exception("Solver ID not set");
         }
-
+    }
+    
+    private function check_if_already_run($dbHandle, $input) {
         // Determine if this problem-input pair had previously been run
         // NOTE: PDO #rowCount() does not work well with MySQL, hence the use of #fetchColumn()
         $checkIfAlreadyRun_stmt = $dbHandle->prepare("SELECT COUNT(*) FROM solutions
