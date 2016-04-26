@@ -1,6 +1,6 @@
 <?php
 
-include_once(__DIR__."/../classes/Problems.php");
+require_once(__DIR__."/../classes/Problems.php");
 
 // Get the requested problem's ID
 $reqProbId = intval($_GET["id"]);

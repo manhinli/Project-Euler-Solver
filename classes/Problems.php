@@ -1,6 +1,6 @@
 <?php
 
-include_once(__DIR__."/DbConnection.php");
+require_once(__DIR__."/DbConnection.php");
 
 class Problems {
     public static function fetch($reqProbId) {

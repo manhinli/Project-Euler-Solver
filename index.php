@@ -1,6 +1,6 @@
 <?php
     // Includes for the whole page
-    include_once(__DIR__."/classes/Problems.php");
+    require_once(__DIR__."/classes/Problems.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,7 +63,7 @@ EOT;
         if (isset($_POST["input"])) {
             $solverClass = "Solver" . $reqProbId;
 
-            include_once(__DIR__."/solvers/" . $solverClass . ".php");
+            require_once(__DIR__."/solvers/" . $solverClass . ".php");
 
             $solver = new $solverClass();
 

@@ -14,7 +14,7 @@ $reqProbId = intval($data["problem_id"]);
 // Dynamically generate the class (which should be named "SolverX" where X = ID)
 $solverClass = "Solver" . $reqProbId;
 
-include_once(__DIR__."/../solvers/" . $solverClass . ".php");
+require_once(__DIR__."/../solvers/" . $solverClass . ".php");
 
 $solver = new $solverClass();
 
