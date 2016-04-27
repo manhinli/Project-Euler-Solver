@@ -7,6 +7,7 @@ require_once(__DIR__."/../classes/Problems.php");
 $reqProbId = intval($_GET["id"]);
     
 try {
+    // Fetch that particular problem
     $problemInfo = Problems::fetch($reqProbId);
     (new ApiWrapper($problemInfo))->respond_as_json();
     

@@ -24,6 +24,7 @@ class DbConnection {
     }
     
     public function &open() {
+        // Create a connection using PDO as configured above
         $this->handle = new PDO(
             "mysql:host=" . self::$host . ";dbname=" . self::$dbname . ";charset=utf8",
             self::$username,

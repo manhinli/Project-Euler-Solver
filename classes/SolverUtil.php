@@ -1,6 +1,8 @@
 <?php
 
 class SolverUtil {
+    // Function to create a new instance of a solver class for the requested
+    //  problem ID by fetching it from the solvers/ directory
     public static function load_solver($reqProbId) {
         // Naming of classes should be "SolverX" where `X` is the problem ID
         $solverClass = "Solver" . $reqProbId;

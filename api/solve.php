@@ -16,9 +16,7 @@ try {
         throw new Exception("Invalid problem ID");
     }
 
-    // Dynamically generate the class
-    $solver = SolverUtil::load_solver($reqProbId);
-
+    // Check that we have input
     if (!isset($_POST["input"])) {
         throw new Exception("No input received");    
     }
@@ -26,6 +24,7 @@ try {
     $input = $_POST["input"];
 
     // Run the solver
+    $solver = SolverUtil::load_solver($reqProbId);
     $output = $solver->solve(trim($input));
     (new ApiWrapper($output))->respond_as_json();
     

@@ -9,6 +9,8 @@ abstract class Solver
 {
     protected $id;
     
+    // Runs through all steps required for solving the problem for the input
+    //  parameter $input
     public function solve($input) {
         $this->check_id_exists();
         
@@ -56,16 +58,16 @@ abstract class Solver
     }
     
     // Check that $id is defined
-    // This is required in order to be able to look up the
-    //  correct entries for the selected problem
+    // This is required in order to be able to look up the correct entries for
+    //  the selected problem
     private function check_id_exists() {
         if (!isset($this->id)) {
             throw new Exception("Solver ID not set");
         }
     }
     
+    // Determine if this problem-input pair had previously been run
     private function check_if_already_run($dbHandle, $input) {
-        // Determine if this problem-input pair had previously been run
         // NOTE: PDO #rowCount() does not work well with MySQL, hence the use of #fetchColumn()
         $checkIfAlreadyRun_stmt = $dbHandle->prepare("SELECT COUNT(*) FROM solutions
                                                         WHERE problem_id = :id AND test_number = :input");
@@ -80,6 +82,7 @@ abstract class Solver
         return $checkIfAlreadyRun_stmt->fetchColumn() > 0;
     }
     
+    // Fetch previously cached solution from the database
     private function get_solution_from_db($dbHandle, $input) {
         $prevSolution_stmt = $dbHandle->prepare("SELECT test_answer FROM solutions
                                                     WHERE problem_id = :id AND test_number = :input
@@ -95,6 +98,7 @@ abstract class Solver
         return $prevSolution_stmt->fetchColumn();
     }
     
+    // Write a computed solution to the database
     private function write_solution_to_db($dbHandle, $input, $solution) {
         $writeSolution_stmt = $dbHandle->prepare("INSERT INTO solutions(problem_id, test_number, test_answer)
                                                     VALUES(:id, :input, :solution)");
@@ -107,6 +111,7 @@ abstract class Solver
         }
     }
     
+    // Increment the total number of runs a solution has had
     private function incr_solution_total_runs($dbHandle, $input) {
         $totalRunIncr_stmt = $dbHandle->prepare("UPDATE solutions
                                                     SET total_runs = total_runs + 1
@@ -121,6 +126,7 @@ abstract class Solver
         return $this->get_solution_total_runs($dbHandle, $input);
     }
     
+    // Get the number of runs a solution has had
     private function get_solution_total_runs($dbHandle, $input) {
         $totalRuns_stmt = $dbHandle->prepare("SELECT total_runs FROM solutions
                                                 WHERE problem_id = :id AND test_number = :input");
@@ -136,6 +142,9 @@ abstract class Solver
     
     
     // To be implemented by the solver class
+    //
+    // Return type is string, as it is saved to the database and returned to the
+    //  user as such
     abstract protected function execute_solver($input);
 }
 

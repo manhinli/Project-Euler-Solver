@@ -46,6 +46,9 @@ dfn {
     text-decoration: none;
 }
 
+
+
+/* Wrapper for most of the content on the page */
 #content {
     position: absolute;
     top: 6em;
@@ -58,7 +61,6 @@ dfn {
     overflow-y: auto;
 }
 
-
 #content > .all-problems-link {
     display: none;
     text-align: center;
@@ -69,6 +71,7 @@ dfn {
     color: #000;
     border: 1px solid #bbb;
 }
+
 
 /* Navigation block for problem selection */
 #nav {
@@ -124,6 +127,8 @@ dfn {
     background: #FFE8B4;
 }
 
+
+
 /* Workspace for all cards such as problem statements/forms */
 #card-workspace {
     display: block;
@@ -135,6 +140,8 @@ dfn {
     right: 0;
 }
 
+
+/* Cards */
 #card-workspace .card {
     position: relative;
     
@@ -160,6 +167,8 @@ dfn {
     margin-top: 2em;
 }
 
+
+/* Problem cards */
 #card-workspace .card.problem::before {
     display: inline-block;
     content: "#" attr(data-problem-id);
@@ -211,25 +220,12 @@ dfn {
     background: #FDEAEA;
 }
 
-/*#card-workspace .card.problem + .card.problem-input {
-    margin-top: -1px;
-    border-top-color: #eee;
-}
-
-#card-workspace .card.problem-input + .card.problem-input {
-    margin-top: -1px;
-    border-top-color: #CCEEFF;
-    background: #EAF7FD;
-}*/
-
-
 #card-workspace .card.problem .proj-euler-link {
     margin-top: 3em;
     display: inline-block;
     font-size: 0.8em;
     font-style: italic;
 }
-
 
 #card-workspace .card.problem .problem-input-form {
     font-size: 1.2em;
@@ -243,23 +239,9 @@ dfn {
     margin-bottom: 0.5em;
 }
 
-/*#card-workspace .card.problem .solution {
-    display: table;
-    width: 100%;
-    padding: 1rem 0;
-}
-
-#card-workspace .card.problem .solution .row {
-    display: table-row;
-}
-
-#card-workspace .card.problem .solution .cell {
-    display: table-cell;
-    padding: 1rem 2rem;
-}*/
 
 
-
+/* Solution blocks */
 #card-workspace .card.problem .solution .solution-input,
 #card-workspace .card.problem .solution .solution-output {
     display: inline-block;
@@ -351,8 +333,9 @@ dfn {
 
 
 
+/** Responsive website styles **/
 
-
+/* Medium size (smaller desktop) */
 @media (max-width: 1200px) {
     html, body {
         font-size: 16px;
@@ -367,6 +350,7 @@ dfn {
     }
 }
 
+/* Mobile/tablet */
 @media (max-width: 900px) {
     html, body {
         font-size: 14px;

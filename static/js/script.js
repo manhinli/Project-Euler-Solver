@@ -1,5 +1,7 @@
 (function($) {
     // Templates and core functions
+    
+    // A template for each problem card, prefilled with given info content
     function createProblemCard(problemInfo) {
         var $card_problem = $('\
             <div class="card problem">\
@@ -29,6 +31,8 @@
         return $card_problem;
     }
     
+    // A template for each solution block (inserted at the end of a problem 
+    //  card)
     function createSolutionBlock() {
         var $solution = $('\
             <div class="solution">\
@@ -50,6 +54,8 @@
         return $solution;
     }
     
+    // Function to asynchronously load problem information from the server and
+    //  create cards that are inserted into the page
     function loadProblemCard(problemId, $cardWorkspace, disableHistoryPush) {
         var $topProblemCard = $(".card.problem", $cardWorkspace).eq(0);
         
@@ -85,6 +91,7 @@
         }).done(function(problemInfo) {
             var $card_problem = createProblemCard(problemInfo);
             
+            // "Replace" the placeholder card with the actual problem card
             $card_placeholder.after($card_problem);
             $card_placeholder.remove();
             
@@ -154,6 +161,8 @@
                 dataType: "json"
             })
                 .done(function(solutionInfo) {
+                    // If solution was successfully returned, we write in the
+                    //  content of the solution to the solution block
                     $solution
                         .removeClass("in-progress")
                         .addClass("success");
@@ -162,6 +171,8 @@
                     $(".solution-total-run-value", $solution).text(solutionInfo.total_runs);
                     $(".solution-exec-time-value", $solution).text(solutionInfo.exec_time);
                     
+                    // This removes the "s" at the end of "total runs" if there
+                    //  is only one run
                     if (solutionInfo.total_runs === 1) {
                         $(".solution-total-run-value-plural", $solution).remove();
                     }
@@ -169,6 +180,8 @@
                     $(".solution-compute-info", $solution).show();
                 })
                 .fail(function(jqXHR) {
+                    // If the solution failed to eventuate, then we give the
+                    //  response (where available) and set the status to "fail".
                     $solution
                         .removeClass("in-progress")
                         .addClass("fail");
