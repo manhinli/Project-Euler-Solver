@@ -38,7 +38,7 @@ commands.
 
 ### 2. Copy code
 Simply copy the entire project to the intended folder where the website shall be
-hosted from.
+hosted from. You can download a copy of the code from [releases](https://github.com/manhinli/Project-Euler-Solver/releases).
 
 If using a fresh Bitnami stack, you can simply clear out
 `[BITNAMI_INSTALL_DIRECTORY]/apache2/htdocs` and place code in there. More
