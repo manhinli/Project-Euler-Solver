@@ -56,8 +56,8 @@ class DbConnection {
     private static $host = "localhost";
     private static $dbname = "uq498819";    // Name of database created in Step 1
     
-    private static $username = "user";
-    private static $password = "password";
+    private static $username = "user";      // MySQL user with permissions to database
+    private static $password = "password";  // Above user's password
     
 ...
 ```
