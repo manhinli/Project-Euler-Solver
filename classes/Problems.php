@@ -26,7 +26,6 @@ class Problems {
                 throw new Exception("Could not fetch requested problem or it does not exist");
             }
             
-            
         } catch (Exception $e) {
             $dbConn->close();
             throw $e;
@@ -44,7 +43,6 @@ class Problems {
 
         try {
             // Only fetching the ID and title of each problem
-            // All information fetched using ./problem.php?id=[id]
             $availProblems = $dbHandle
                                 ->query("SELECT id, title from problems ORDER BY id ASC")
                                 ->fetchAll(PDO::FETCH_ASSOC);
