@@ -48,16 +48,14 @@ class Solver57 extends Solver {
         // a longer numerator than denominator
         $count = 0;
         
-        
-        // The first run must be set, because we can't really work with the base
-        // case of 1/1.
-        $num = '3';
-        $denom = '2';
+        // Base case (before first iteration)
+        $num = '1';
+        $denom = '1';
         
         
         // Note that we start at 1 because we already "ran" the first iteration
         // by supplying the numerator and denominator above
-        for ($i = 1; $i < $input; ++$i) {
+        for ($i = 0; $i < $input; ++$i) {
             
             // We can get away with using the same variables instead of creating
             // new placeholders by using a little algebra

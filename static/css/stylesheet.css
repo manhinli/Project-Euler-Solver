@@ -59,6 +59,17 @@ dfn {
 }
 
 
+#content > .all-problems-link {
+    display: none;
+    text-align: center;
+    padding: 1em;
+    background: #FFD463;
+    margin: 1rem;
+    margin-bottom: 0;
+    color: #000;
+    border: 1px solid #bbb;
+}
+
 /* Navigation block for problem selection */
 #nav {
     display: block;
@@ -373,16 +384,40 @@ dfn {
         top: 4em;
     }
     
+    #content > .all-problems-link {
+        display: block;
+    }
+    
     #nav {
         position: static;
         max-height: 50%;
         width: 100%;
+        
+        margin: 5rem 0;
         
         border-right: none;
     }
     
     #nav > * {
         padding: 0.5em 1rem;
+    }
+    
+    #nav.js-toggle-menu {
+        max-height: 25%;
+        margin: 0px 1rem;
+        width: auto;
+        border: 1px solid #bbb;
+        border-top: none;
+    }
+    
+    #nav.js-toggle-menu.closed {
+        display: none;
+    }
+    
+    #nav.js-toggle-menu > .title {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
     }
     
     #card-workspace {

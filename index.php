@@ -1,7 +1,7 @@
 <?php
     // Includes for the whole page
     require_once(__DIR__."/classes/Problems.php");
-    require_once(__DIR__."/classes/Solver.php");
+    require_once(__DIR__."/classes/SolverUtil.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,6 +25,7 @@
         </h1>
     </div>
     <div id="content">
+        <a class="all-problems-link" href="#all-problems">View all problems</a>
         <div id="card-workspace">
 <?php
     // If there is an ID given, load that card in
@@ -34,7 +35,7 @@
     }
     
     if (isset($_POST["problem_id"])) {
-        $reqProbId = intval($_POST["problem_id"]);
+        $reqProbId = intval($_POST["problem_id"]);  
     }
     
     if (isset($reqProbId)) {
@@ -120,13 +121,14 @@ EOT;
             <div class="card">
 <?php if (!isset($reqProbId)) { ?>
                 <h2>Welcome to the Project Euler Solver</h2>
-                <p>Please select a problem to run our solver through.</p>        
+                <p>Please select a problem to run our solver through.</p>
+                <br />       
 <?php } ?>
                 <p>Content and problem statements derived from <a href="https://projecteuler.net">Project Euler</a> licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/2.0/uk/">Creative Commons BY-NC-SA 2.0 UK</a>.</p>
             </div>
         </div>
         <div id="nav">
-            <h3 class="title">Problems</h3>
+            <h3 class="title" id="all-problems">Problems</h3>
 <?php
     // Generate the links to each problem
     foreach (Problems::fetch_all() as $problemInfo) {

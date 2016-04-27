@@ -97,6 +97,29 @@
     $(function() {
         var $nav = $("#nav");
         var $cardWorkspace = $("#card-workspace");
+        var $allProblemsLink = $("#content > .all-problems-link");
+        
+        
+        // Rearrange #nav to be located immediately after the "view all
+        //  problems" link
+        $allProblemsLink.after($nav);
+        $nav.addClass("js-toggle-menu");
+        
+        // If there is a problem card already displayed, then close the problems
+        //  list 
+        if ($(".card.problem", $cardWorkspace).length) {
+            $nav.addClass("closed");
+        }
+        
+        // The "view all problems" link now toggles the visibility of the
+        //  problems list
+        $allProblemsLink.on("click", function(e) {
+            e.preventDefault();
+            
+            $nav.toggleClass("closed");
+        });
+        
+        
         
         // Selecting a new problem
         $nav.on("click", "a", function(e) {

@@ -1,7 +1,7 @@
 <?php
 
 require_once(__DIR__."/../classes/ApiWrapper.php");
-require_once(__DIR__."/../classes/Solver.php");
+require_once(__DIR__."/../classes/SolverUtil.php");
 
 try {
     // Only process POSTs

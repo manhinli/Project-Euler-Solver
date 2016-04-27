@@ -20,27 +20,26 @@ abstract class Solver
         $dbConn = new DbConnection();
         $dbHandle =& $dbConn->open();
         
-        
-        
-        // TODO: THIS IS NOT THREAD SAFE!
-        
-        
-        
-        if ($this->check_if_already_run($dbHandle, $input)) {
-            // If so, returned cached value from DB
-            $solution = $this->get_solution_from_db($dbHandle, $input);
-        } else {
-            // Else execute the solver and write solution in
-            $solution = $this->execute_solver($input);
-            $this->write_solution_to_db($dbHandle, $input, $solution);
+        try {
+            if ($this->check_if_already_run($dbHandle, $input)) {
+                // If so, returned cached value from DB
+                $solution = $this->get_solution_from_db($dbHandle, $input);
+            } else {
+                // Else execute the solver and write solution in
+                $solution = $this->execute_solver($input);
+                $this->write_solution_to_db($dbHandle, $input, $solution);
+            }
+            
+            // Number of runs of *this* particular problem-input pair
+            $totalRuns = $this->incr_solution_total_runs($dbHandle, $input);
+            
+        } catch (Exception $e) {
+            $dbConn->close();
+            throw $e;
         }
         
-        // Number of runs of *this* particular problem-input pair
-        $totalRuns = $this->incr_solution_total_runs($dbHandle, $input);
-        
         $dbConn->close();
-        
-        
+
         
         $timeEnd = microtime(true);
         
@@ -56,9 +55,9 @@ abstract class Solver
                         'exec_time' => $execTime    );
     }
     
-        // Check that $id is defined
-        // This is required in order to be able to look up the
-        //  correct entries for the selected problem
+    // Check that $id is defined
+    // This is required in order to be able to look up the
+    //  correct entries for the selected problem
     private function check_id_exists() {
         if (!isset($this->id)) {
             throw new Exception("Solver ID not set");
@@ -109,9 +108,6 @@ abstract class Solver
     }
     
     private function incr_solution_total_runs($dbHandle, $input) {
-        
-        // TODO: Consider stored procedure on DB? Or one full transaction with get_solution_total_runs()?        
-        
         $totalRunIncr_stmt = $dbHandle->prepare("UPDATE solutions
                                                     SET total_runs = total_runs + 1
                                                     WHERE problem_id = :id AND test_number = :input");
@@ -141,20 +137,6 @@ abstract class Solver
     
     // To be implemented by the solver class
     abstract protected function execute_solver($input);
-}
-
-class SolverUtil {
-    public static function load_solver($reqProbId) {
-        $solverClass = "Solver" . $reqProbId;
-
-        try {
-            require_once(__DIR__."/../solvers/" . $solverClass . ".php");
-        } catch (Exception $e) {
-            throw new Exception("Unable to locate or load solver code");
-        }
-        
-        return new $solverClass();
-    }
 }
 
 ?>
